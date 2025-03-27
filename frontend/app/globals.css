@@ -1,0 +1,137 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --neon-blue: #00f3ff;
+  --neon-pink: #ff00ff;
+  --neon-purple: #9d00ff;
+  --dark-bg: #0a0a0f;
+}
+
+@layer base {
+  body {
+    @apply bg-[#0a0a0f] text-white;
+  }
+}
+
+@layer components {
+  .neon-border {
+    position: relative;
+    border: 1px solid rgba(0, 243, 255, 0.3);
+  }
+
+  .neon-border::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border: 1px solid transparent;
+    border-radius: inherit;
+    pointer-events: none;
+    background: linear-gradient(90deg, var(--neon-blue), var(--neon-pink))
+      border-box;
+    -webkit-mask: linear-gradient(#fff 0 0) padding-box,
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: destination-out;
+    mask-composite: exclude;
+  }
+
+  .neon-glow {
+    box-shadow: 0 0 10px rgba(0, 243, 255, 0.3), 0 0 20px rgba(0, 243, 255, 0.2),
+      0 0 30px rgba(0, 243, 255, 0.1);
+  }
+
+  .cyber-grid {
+    background-image: linear-gradient(
+        rgba(0, 243, 255, 0.1) 1px,
+        transparent 1px
+      ),
+      linear-gradient(90deg, rgba(0, 243, 255, 0.1) 1px, transparent 1px);
+    background-size: 30px 30px;
+  }
+
+  .card-3d {
+    transform-style: preserve-3d;
+    perspective: 1000px;
+  }
+
+  .card-3d:hover {
+    transform: translateY(-5px) rotateX(5deg);
+  }
+
+  /* Points Animation */
+  @keyframes pointsEarned {
+    0% {
+      transform: scale(0.8);
+      opacity: 0;
+    }
+    50% {
+      transform: scale(1.2);
+      opacity: 1;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+
+  .points-earned {
+    animation: pointsEarned 0.5s ease-out forwards;
+  }
+
+  /* Quiz Feedback Animation */
+  @keyframes quizFeedback {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.05);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+
+  .quiz-feedback {
+    animation: quizFeedback 0.3s ease-in-out;
+  }
+
+  /* Progress Bar Animation */
+  @keyframes progressFill {
+    from {
+      transform: scaleX(0);
+    }
+    to {
+      transform: scaleX(1);
+    }
+  }
+
+  .progress-fill {
+    transform-origin: left;
+    animation: progressFill 0.5s ease-out forwards;
+  }
+}
+
+/* Prose Styles for Course Content */
+.prose {
+  @apply text-gray-300;
+}
+
+.prose strong {
+  @apply text-white;
+}
+
+.prose a {
+  @apply text-[#00f3ff] hover:text-white transition-colors;
+}
+
+.prose code {
+  @apply bg-gray-800 px-1.5 py-0.5 rounded text-[#ff00ff];
+}
+
+.prose pre {
+  @apply bg-gray-800/50 p-4 rounded-lg overflow-x-auto;
+}
