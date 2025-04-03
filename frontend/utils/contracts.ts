@@ -1,8 +1,8 @@
 import { ethers } from "ethers";
-import SongNFTAbi from "./SongNFTAbi.json"; // 需要从编译后的合约中获取 ABI
+import SongNFTAbi from "@/contracts/SongNFT.sol/SongNFT.json";
 
 // 合约地址，需要替换为实际部署后的地址
-const CONTRACT_ADDRESS = "YOUR_DEPLOYED_CONTRACT_ADDRESS";
+const CONTRACT_ADDRESS = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";
 
 export const mintNFT = async () => {
   try {

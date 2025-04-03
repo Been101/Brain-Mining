@@ -8,7 +8,7 @@ const RedirectPage = () => {
   const { authState, ocAuth } = useOCAuth();
 
   const loginSuccess = () => {
-    router.push("/user"); // Redirect to user or any other page
+    router.push("/"); // Redirect to user or any other page
   };
 
   const loginError = () => {
@@ -31,7 +31,7 @@ const RedirectPage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ocAuth]);
 
-  if (authState.error) {
+  if (authState?.error) {
     return <div>Error Logging in: {authState.error.message}</div>;
   }
 

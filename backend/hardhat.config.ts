@@ -20,6 +20,9 @@ const config: HardhatUserConfig = {
     artifacts: "./src",
   },
   networks: {
+    hardhat: {
+      chainId: 31337,
+    },
     "educhain-testnet": {
       url: `https://rpc.open-campus-codex.gelato.digital`,
       accounts: [ACCOUNT_PRIVATE_KEY],

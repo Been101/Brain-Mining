@@ -20,7 +20,7 @@ interface DecodedToken {
 
 const Header: React.FC = () => {
   const { authState } = useOCAuth();
-  const userInfo = authState.idToken
+  const userInfo = authState?.idToken
     ? jwtDecode<DecodedToken>(authState.idToken)
     : null;
 
