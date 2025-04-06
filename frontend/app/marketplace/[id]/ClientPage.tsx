@@ -1,6 +1,6 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
+import { useState } from "react";
 import { ArrowLeft, History } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -13,7 +13,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import type { NFT } from '@/lib/types';
+import type { NFT } from "@/lib/types";
 
 interface ClientPageProps {
   id: string;
@@ -30,17 +30,13 @@ export default function ClientPage({ id, initialData }: ClientPageProps) {
   const handlePurchase = async () => {
     setIsPurchasing(false);
     // Here you would integrate with MetaMask and smart contract
-    toast({
-      title: "Purchase Initiated",
-      description: "Please confirm the transaction in your wallet",
-      className: "bg-gray-900 border-[#00f3ff]/30",
-    });
+    toast.success("Purchase Initiated");
   };
 
   return (
     <div className="min-h-screen bg-[#0a0a0f] cyber-grid pt-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <Link 
+        <Link
           href="/marketplace"
           className="inline-flex items-center text-[#00f3ff] hover:text-white mb-8 transition-colors"
         >
@@ -65,11 +61,15 @@ export default function ClientPage({ id, initialData }: ClientPageProps) {
             <div className="grid grid-cols-2 gap-4">
               <div className="p-4 rounded-lg bg-gray-900/30 backdrop-blur-sm neon-border">
                 <div className="text-sm text-gray-400">Rarity</div>
-                <div className="text-lg font-semibold">{nft.rarityPercentage}%</div>
+                <div className="text-lg font-semibold">
+                  {nft.rarityPercentage}%
+                </div>
               </div>
               <div className="p-4 rounded-lg bg-gray-900/30 backdrop-blur-sm neon-border">
                 <div className="text-sm text-gray-400">Evolution Stage</div>
-                <div className="text-lg font-semibold">{nft.evolutionStage}/3</div>
+                <div className="text-lg font-semibold">
+                  {nft.evolutionStage}/3
+                </div>
               </div>
             </div>
 
@@ -77,7 +77,9 @@ export default function ClientPage({ id, initialData }: ClientPageProps) {
               <div className="flex items-center justify-between mb-4">
                 <div>
                   <div className="text-sm text-gray-400">Current Price</div>
-                  <div className="text-3xl font-bold text-[#00f3ff]">{nft.price} ETH</div>
+                  <div className="text-3xl font-bold text-[#00f3ff]">
+                    {nft.price} ETH
+                  </div>
                 </div>
                 <Button
                   onClick={() => setIsPurchasing(true)}
@@ -86,9 +88,7 @@ export default function ClientPage({ id, initialData }: ClientPageProps) {
                   Buy Now
                 </Button>
               </div>
-              <div className="text-sm text-gray-400">
-                Owner: {nft.owner}
-              </div>
+              <div className="text-sm text-gray-400">Owner: {nft.owner}</div>
             </div>
 
             <div className="space-y-4">

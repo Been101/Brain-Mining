@@ -1,14 +1,15 @@
 "use client";
 
-import { useState } from 'react';
-import { Gift, Zap, CreditCard, Send } from 'lucide-react';
-import Link from 'next/link';
-import { useToast } from "@/components/ui/use-toast";
-import { NFTCard } from '@/components/nft-card';
-import { GiftNFTDialog } from '@/components/gift-nft-dialog';
-import { SendNFTDialog } from '@/components/send-nft-dialog';
-import { SellNFTDialog } from '@/components/sell-nft-dialog';
-import { cn } from '@/lib/utils';
+import { useState } from "react";
+import { Gift, Zap, CreditCard, Send } from "lucide-react";
+import Link from "next/link";
+import { toast, useToast } from "@/components/ui/use-toast";
+import { NFTCard } from "@/components/nft-card";
+import { GiftNFTDialog } from "@/components/gift-nft-dialog";
+import { SendNFTDialog } from "@/components/send-nft-dialog";
+import { SellNFTDialog } from "@/components/sell-nft-dialog";
+import { cn } from "@/lib/utils";
+import { NFT } from "@/lib/types";
 
 const nfts = [
   {
@@ -16,7 +17,8 @@ const nfts = [
     name: "Cyber Fox",
     rarity: "common",
     level: 1,
-    image: "https://api.dicebear.com/7.x/adventurer/svg?seed=cyber-fox&backgroundColor=00f3ff",
+    image:
+      "https://api.dicebear.com/7.x/adventurer/svg?seed=cyber-fox&backgroundColor=00f3ff",
     price: 0.1,
   },
   {
@@ -24,7 +26,8 @@ const nfts = [
     name: "Digital Dragon",
     rarity: "rare",
     level: 2,
-    image: "https://api.dicebear.com/7.x/adventurer/svg?seed=digital-dragon&backgroundColor=9d00ff",
+    image:
+      "https://api.dicebear.com/7.x/adventurer/svg?seed=digital-dragon&backgroundColor=9d00ff",
     price: 0.3,
   },
   {
@@ -32,7 +35,8 @@ const nfts = [
     name: "Golden Guardian",
     rarity: "epic",
     level: 3,
-    image: "https://api.dicebear.com/7.x/adventurer/svg?seed=golden-guardian&backgroundColor=ff00ff",
+    image:
+      "https://api.dicebear.com/7.x/adventurer/svg?seed=golden-guardian&backgroundColor=ff00ff",
     price: 0.5,
   },
 ];
@@ -44,73 +48,58 @@ export default function RewardsPage() {
   const [isSellDialogOpen, setIsSellDialogOpen] = useState(false);
   const { toast } = useToast();
 
-  const selectedNFTData = selectedNFT !== null 
-    ? nfts.find(nft => nft.id === selectedNFT) 
-    : null;
+  const selectedNFTData =
+    selectedNFT !== null ? nfts.find((nft) => nft.id === selectedNFT) : null;
 
   const handleGift = async (recipientAddress: string) => {
-    toast({
-      title: "Gift Transaction Initiated",
-      description: `Sending NFT to ${recipientAddress.slice(0, 6)}...${recipientAddress.slice(-4)}`,
-      className: "bg-gray-900 border-[#00f3ff]/30",
-    });
+    toast.success(
+      `Sending NFT to ${recipientAddress.slice(
+        0,
+        6
+      )}...${recipientAddress.slice(-4)}`
+    );
 
     setTimeout(() => {
-      toast({
-        title: "Gift Sent Successfully!",
-        description: "The NFT has been transferred to the recipient.",
-        className: "bg-gray-900 border-[#00f3ff]/30",
-      });
+      toast.success("Gift Sent Successfully!");
       setIsGiftDialogOpen(false);
     }, 2000);
   };
 
   const handleSend = async (recipientAddress: string) => {
-    toast({
-      title: "Transfer Initiated",
-      description: `Sending NFT to ${recipientAddress.slice(0, 6)}...${recipientAddress.slice(-4)}`,
-      className: "bg-gray-900 border-[#00f3ff]/30",
-    });
+    toast.success(
+      `Sending NFT to ${recipientAddress.slice(
+        0,
+        6
+      )}...${recipientAddress.slice(-4)}`
+    );
 
     setTimeout(() => {
-      toast({
-        title: "Transfer Successful!",
-        description: "Your NFT has been sent to the recipient.",
-        className: "bg-gray-900 border-[#00f3ff]/30",
-      });
+      toast.success("Transfer Successful!");
       setIsSendDialogOpen(false);
     }, 2000);
   };
 
   const handleSell = async (price: string) => {
-    toast({
-      title: "Listing NFT",
-      description: `Creating marketplace listing for ${price} ETH`,
-      className: "bg-gray-900 border-[#00f3ff]/30",
-    });
+    toast.success(`Creating marketplace listing for ${price} ETH`);
 
     setTimeout(() => {
-      toast({
-        title: "NFT Listed Successfully!",
-        description: "Your NFT is now available in the marketplace.",
-        className: "bg-gray-900 border-[#00f3ff]/30",
-      });
+      toast.success("NFT Listed Successfully!");
       setIsSellDialogOpen(false);
     }, 2000);
   };
 
   const handleAction = (action: string) => {
-    const audio = new Audio('/sounds/click.mp3');
+    const audio = new Audio("/sounds/click.mp3");
     audio.play();
-    
+
     switch (action) {
-      case 'Send':
+      case "Send":
         setIsSendDialogOpen(true);
         break;
-      case 'Sell':
+      case "Sell":
         setIsSellDialogOpen(true);
         break;
-      case 'Gift':
+      case "Gift":
         setIsGiftDialogOpen(true);
         break;
     }
@@ -130,7 +119,7 @@ export default function RewardsPage() {
           {nfts.map((nft) => (
             <NFTCard
               key={nft.id}
-              nft={nft}
+              nft={nft as NFT}
               selected={selectedNFT === nft.id}
               onSelect={() => setSelectedNFT(nft.id)}
             />
@@ -139,7 +128,7 @@ export default function RewardsPage() {
 
         <div className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-4">
           <button
-            onClick={() => handleAction('Send')}
+            onClick={() => handleAction("Send")}
             className="p-4 rounded-lg neon-border bg-gray-900/30 backdrop-blur-sm hover:bg-gray-900/50 transition-all duration-300"
             disabled={selectedNFT === null}
           >
@@ -147,7 +136,7 @@ export default function RewardsPage() {
             <span className="block text-sm">Send NFT</span>
           </button>
           <button
-            onClick={() => handleAction('Sell')}
+            onClick={() => handleAction("Sell")}
             className="p-4 rounded-lg neon-border bg-gray-900/30 backdrop-blur-sm hover:bg-gray-900/50 transition-all duration-300"
             disabled={selectedNFT === null}
           >
@@ -162,7 +151,7 @@ export default function RewardsPage() {
             <span className="block text-sm">Evolution Lab</span>
           </Link>
           <button
-            onClick={() => handleAction('Gift')}
+            onClick={() => handleAction("Gift")}
             className="p-4 rounded-lg neon-border bg-gray-900/30 backdrop-blur-sm hover:bg-gray-900/50 transition-all duration-300"
             disabled={selectedNFT === null}
           >
@@ -173,21 +162,21 @@ export default function RewardsPage() {
       </div>
 
       <SendNFTDialog
-        nft={selectedNFTData}
+        nft={selectedNFTData as NFT | null}
         open={isSendDialogOpen}
         onOpenChange={setIsSendDialogOpen}
         onConfirm={handleSend}
       />
 
       <SellNFTDialog
-        nft={selectedNFTData}
+        nft={selectedNFTData as NFT | null}
         open={isSellDialogOpen}
         onOpenChange={setIsSellDialogOpen}
         onConfirm={handleSell}
       />
 
       <GiftNFTDialog
-        nft={selectedNFTData}
+        nft={selectedNFTData as NFT | null}
         open={isGiftDialogOpen}
         onOpenChange={setIsGiftDialogOpen}
         onConfirm={handleGift}

@@ -1,11 +1,11 @@
 "use client";
 
-import { useState } from 'react';
-import { ArrowLeft, Plus } from 'lucide-react';
-import Link from 'next/link';
+import { useState } from "react";
+import { ArrowLeft, Plus } from "lucide-react";
+import Link from "next/link";
 import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
-import { NFTCard } from '@/components/nft-card';
+import { NFTCard } from "@/components/nft-card";
 import {
   Dialog,
   DialogContent,
@@ -15,7 +15,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import type { NFT } from '@/lib/types';
+import type { NFT } from "@/lib/types";
 
 const userNFTs: NFT[] = [
   {
@@ -23,19 +23,21 @@ const userNFTs: NFT[] = [
     name: "Cyber Fox",
     rarity: "common",
     level: 1,
-    image: "https://api.dicebear.com/7.x/adventurer/svg?seed=cyber-fox&backgroundColor=00f3ff",
+    image:
+      "https://api.dicebear.com/7.x/adventurer/svg?seed=cyber-fox&backgroundColor=00f3ff",
     price: 0.1,
-    owner: "0x1234...5678"
+    owner: "0x1234...5678",
   },
   {
     id: 2,
     name: "Digital Dragon",
     rarity: "rare",
     level: 2,
-    image: "https://api.dicebear.com/7.x/adventurer/svg?seed=digital-dragon&backgroundColor=9d00ff",
+    image:
+      "https://api.dicebear.com/7.x/adventurer/svg?seed=digital-dragon&backgroundColor=9d00ff",
     price: 0.3,
-    owner: "0x1234...5678"
-  }
+    owner: "0x1234...5678",
+  },
 ];
 
 export default function ProfilePage() {
@@ -47,17 +49,13 @@ export default function ProfilePage() {
   const handleList = async () => {
     setIsListing(false);
     // Here you would integrate with MetaMask and smart contract
-    toast({
-      title: "Listing Created",
-      description: "Your NFT has been listed on the marketplace",
-      className: "bg-gray-900 border-[#00f3ff]/30",
-    });
+    toast.success("Listing Created");
   };
 
   return (
     <div className="min-h-screen bg-[#0a0a0f] cyber-grid pt-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <Link 
+        <Link
           href="/marketplace"
           className="inline-flex items-center text-[#00f3ff] hover:text-white mb-8 transition-colors"
         >
@@ -120,11 +118,15 @@ export default function ProfilePage() {
                 </div>
                 <div className="flex justify-between text-sm text-gray-400">
                   <span>Platform Fee (2.5%)</span>
-                  <span>{(parseFloat(listingPrice) * 0.025).toFixed(4)} ETH</span>
+                  <span>
+                    {(parseFloat(listingPrice) * 0.025).toFixed(4)} ETH
+                  </span>
                 </div>
                 <div className="border-t border-gray-700 mt-2 pt-2 flex justify-between font-bold">
                   <span>You'll Receive</span>
-                  <span>{(parseFloat(listingPrice) * 0.975).toFixed(4)} ETH</span>
+                  <span>
+                    {(parseFloat(listingPrice) * 0.975).toFixed(4)} ETH
+                  </span>
                 </div>
               </div>
             )}

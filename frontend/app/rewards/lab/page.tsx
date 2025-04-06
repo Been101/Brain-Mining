@@ -1,11 +1,12 @@
 "use client";
 
-import { useState, useRef, useEffect } from 'react';
-import { ArrowLeft } from 'lucide-react';
-import Link from 'next/link';
+import { useState, useRef, useEffect } from "react";
+import { ArrowLeft } from "lucide-react";
+import Link from "next/link";
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/components/ui/use-toast";
-import { NFTCard } from '@/components/nft-card';
+import { NFTCard } from "@/components/nft-card";
+import { NFT } from "@/lib/types";
 
 const nfts = [
   {
@@ -13,7 +14,8 @@ const nfts = [
     name: "Cyber Fox",
     rarity: "common",
     level: 1,
-    image: "https://api.dicebear.com/7.x/adventurer/svg?seed=cyber-fox&backgroundColor=00f3ff",
+    image:
+      "https://api.dicebear.com/7.x/adventurer/svg?seed=cyber-fox&backgroundColor=00f3ff",
     price: 0.1,
   },
   {
@@ -21,7 +23,8 @@ const nfts = [
     name: "Digital Dragon",
     rarity: "rare",
     level: 2,
-    image: "https://api.dicebear.com/7.x/adventurer/svg?seed=digital-dragon&backgroundColor=9d00ff",
+    image:
+      "https://api.dicebear.com/7.x/adventurer/svg?seed=digital-dragon&backgroundColor=9d00ff",
     price: 0.3,
   },
   {
@@ -29,7 +32,8 @@ const nfts = [
     name: "Golden Guardian",
     rarity: "epic",
     level: 3,
-    image: "https://api.dicebear.com/7.x/adventurer/svg?seed=golden-guardian&backgroundColor=ff00ff",
+    image:
+      "https://api.dicebear.com/7.x/adventurer/svg?seed=golden-guardian&backgroundColor=ff00ff",
     price: 0.5,
   },
 ];
@@ -44,7 +48,7 @@ export default function EvolutionLabPage() {
   useEffect(() => {
     if (isEvolving) {
       const interval = setInterval(() => {
-        setEvolutionProgress(prev => {
+        setEvolutionProgress((prev) => {
           if (prev >= 100) {
             clearInterval(interval);
             setIsEvolving(false);
@@ -60,21 +64,17 @@ export default function EvolutionLabPage() {
   }, [isEvolving]);
 
   const playEvolutionCompleteSound = () => {
-    const audio = new Audio('/sounds/evolution-complete.mp3');
+    const audio = new Audio("/sounds/evolution-complete.mp3");
     audio.play();
-    
-    toast({
-      title: "Evolution Complete!",
-      description: "Your NFT has evolved into a more powerful form!",
-      className: "bg-gray-900 border-[#00f3ff]/30",
-    });
+
+    toast.success("Evolution Complete!");
   };
 
   const handleDrop = (e: React.DragEvent, targetId: number) => {
     e.preventDefault();
     if (draggingNFT === null || draggingNFT === targetId) return;
 
-    const audio = new Audio('/sounds/fusion.mp3');
+    const audio = new Audio("/sounds/fusion.mp3");
     audio.play();
     setIsEvolving(true);
   };
@@ -82,7 +82,7 @@ export default function EvolutionLabPage() {
   return (
     <div className="min-h-screen bg-[#0a0a0f] cyber-grid pt-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <Link 
+        <Link
           href="/rewards"
           className="inline-flex items-center text-[#00f3ff] hover:text-white mb-8 transition-colors"
         >
@@ -93,7 +93,9 @@ export default function EvolutionLabPage() {
           <h1 className="text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-[#00f3ff] to-[#ff00ff]">
             NFT Evolution Laboratory
           </h1>
-          <p className="text-gray-400">Drag and drop two NFTs to fuse them together</p>
+          <p className="text-gray-400">
+            Drag and drop two NFTs to fuse them together
+          </p>
         </div>
 
         {isEvolving ? (
@@ -102,7 +104,7 @@ export default function EvolutionLabPage() {
               <div className="text-center mb-2">Evolution in Progress</div>
               <Progress value={evolutionProgress} className="h-4" />
             </div>
-            <canvas 
+            <canvas
               ref={canvasRef}
               className="w-full h-64 rounded-lg bg-black/50"
             />
@@ -117,7 +119,7 @@ export default function EvolutionLabPage() {
                 onDragOver={(e) => e.preventDefault()}
                 onDrop={(e) => handleDrop(e, nft.id)}
               >
-                <NFTCard nft={nft} />
+                <NFTCard nft={nft as NFT} />
               </div>
             ))}
           </div>

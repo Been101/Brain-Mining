@@ -1,150 +1,133 @@
-'use client'
+"use client";
 
-import React, { useState, useEffect } from 'react'
-import Web3 from 'web3'
-import contractABI from '@/contracts/StudyGroup.sol/StudyGroup.json'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { useToast } from '@/components/ui/use-toast'
-import { useOCAuth } from '@opencampus/ocid-connect-js'
-import { jwtDecode } from 'jwt-decode'
-import Header from '@/components/Header'
-import Footer from '@/components/Footer'
-import LoginButton from '@/components/LoginButton'
-import { MetaMaskConnect } from '@/components/MetaMaskConnect'
+import React, { useState, useEffect } from "react";
+import Web3 from "web3";
+import contractABI from "@/contracts/StudyGroup.sol/StudyGroup.json";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { useToast } from "@/components/ui/use-toast";
+import { useOCAuth } from "@opencampus/ocid-connect-js";
+import { jwtDecode } from "jwt-decode";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+import LoginButton from "@/components/LoginButton";
+import { MetaMaskConnect } from "@/components/MetaMaskConnect";
 
 interface Message {
-  sender: string
-  content: string
-  timestamp: number
+  sender: string;
+  content: string;
+  timestamp: number;
 }
 
 interface DecodedToken {
-  edu_username: string
-  [key: string]: any
+  edu_username: string;
+  [key: string]: any;
 }
 
-const contractAddress = '0x158f83cD37e7774b520ADCb9BD7bc80330378c1B'
+const contractAddress = "0x158f83cD37e7774b520ADCb9BD7bc80330378c1B";
 
 export default function StudyGroup() {
-  const { authState } = useOCAuth()
-  const { toast } = useToast()
+  const { authState } = useOCAuth();
+  const { toast } = useToast();
 
-  const [web3, setWeb3] = useState<Web3 | null>(null)
-  const [contract, setContract] = useState<any>(null)
-  const [account, setAccount] = useState<string>('')
-  const [isMember, setIsMember] = useState<boolean>(false)
-  const [messages, setMessages] = useState<Message[]>([])
-  const [newMessage, setNewMessage] = useState<string>('')
-  const [ocidUsername, setOcidUsername] = useState<string | null>(null)
-  const [isConnected, setIsConnected] = useState<boolean>(false)
+  const [web3, setWeb3] = useState<Web3 | null>(null);
+  const [contract, setContract] = useState<any>(null);
+  const [account, setAccount] = useState<string>("");
+  const [isMember, setIsMember] = useState<boolean>(false);
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [newMessage, setNewMessage] = useState<string>("");
+  const [ocidUsername, setOcidUsername] = useState<string | null>(null);
+  const [isConnected, setIsConnected] = useState<boolean>(false);
 
   useEffect(() => {
     if (authState.idToken) {
-      const decodedToken = jwtDecode<DecodedToken>(authState.idToken)
-      setOcidUsername(decodedToken.edu_username)
+      const decodedToken = jwtDecode<DecodedToken>(authState.idToken);
+      setOcidUsername(decodedToken.edu_username);
     }
-  }, [authState.idToken])
+  }, [authState.idToken]);
 
   const handleConnect = async (address: string) => {
     try {
-      const web3Instance = new Web3(window.ethereum)
-      setWeb3(web3Instance)
-      setAccount(address)
-      setIsConnected(true)
+      const web3Instance = new Web3(window.ethereum);
+      setWeb3(web3Instance);
+      setAccount(address);
+      setIsConnected(true);
 
-      const contractInstance = new web3Instance.eth.Contract(contractABI.abi, contractAddress)
-      setContract(contractInstance)
+      const contractInstance = new web3Instance.eth.Contract(
+        contractABI.abi,
+        contractAddress
+      );
+      setContract(contractInstance);
 
-      const memberStatus = await contractInstance.methods.getMemberStatus(address).call()
-      setIsMember(Boolean(memberStatus))
+      const memberStatus = await contractInstance.methods
+        .getMemberStatus(address)
+        .call();
+      setIsMember(Boolean(memberStatus));
 
-      await loadMessages()
+      await loadMessages();
     } catch (error) {
-      console.error('Failed to initialize web3 or contract:', error)
-      toast({
-        title: 'Error',
-        description: 'Failed to connect to wallet. Please try again.',
-        variant: 'destructive',
-      })
+      console.error("Failed to initialize web3 or contract:", error);
+      toast.error("Failed to connect to wallet. Please try again.");
     }
-  }
+  };
 
   const handleDisconnect = () => {
-    setWeb3(null)
-    setContract(null)
-    setAccount('')
-    setIsConnected(false)
-    setIsMember(false)
-    setMessages([])
-  }
+    setWeb3(null);
+    setContract(null);
+    setAccount("");
+    setIsConnected(false);
+    setIsMember(false);
+    setMessages([]);
+  };
 
   const loadMessages = async () => {
     if (contract) {
       try {
-        const fetchedMessages = await contract.methods.getMessages().call()
-        setMessages(fetchedMessages)
+        const fetchedMessages = await contract.methods.getMessages().call();
+        setMessages(fetchedMessages);
       } catch (error) {
-        console.error('Failed to load messages:', error)
-        toast({
-          title: 'Error',
-          description: 'Failed to load messages. Please try again.',
-          variant: 'destructive',
-        })
+        console.error("Failed to load messages:", error);
+        toast.error("Failed to load messages. Please try again.");
       }
     }
-  }
+  };
 
   const joinGroup = async () => {
     if (contract && account) {
       try {
-        await contract.methods.joinGroup().send({ from: account })
-        setIsMember(true)
-        toast({
-          title: 'Success',
-          description: 'You have joined the study group!',
-        })
+        await contract.methods.joinGroup().send({ from: account });
+        setIsMember(true);
+        toast.success("You have joined the study group!");
       } catch (error) {
-        console.error('Failed to join group:', error)
-        toast({
-          title: 'Error',
-          description: 'Failed to join the study group. Please try again.',
-          variant: 'destructive',
-        })
+        console.error("Failed to join group:", error);
+        toast.error("Failed to join the study group. Please try again.");
       }
     }
-  }
+  };
 
   const sendMessage = async () => {
     if (contract && account && newMessage.trim()) {
       try {
-        await contract.methods.sendMessage(newMessage).send({ from: account })
-        setNewMessage('')
-        await loadMessages()
-        toast({
-          title: 'Success',
-          description: 'Message sent successfully!',
-        })
+        await contract.methods.sendMessage(newMessage).send({ from: account });
+        setNewMessage("");
+        await loadMessages();
+        toast.success("Message sent successfully!");
       } catch (error) {
-        console.error('Failed to send message:', error)
-        toast({
-          title: 'Error',
-          description: 'Failed to send message. Please try again.',
-          variant: 'destructive',
-        })
+        console.error("Failed to send message:", error);
+        toast.error("Failed to send message. Please try again.");
       }
     }
-  }
+  };
 
   // Auto-refresh messages
   useEffect(() => {
-    let interval: NodeJS.Timeout
+    let interval: NodeJS.Timeout;
     if (isConnected && contract) {
-      interval = setInterval(loadMessages, 5000)
+      interval = setInterval(loadMessages, 5000);
     }
-    return () => clearInterval(interval)
-  }, [isConnected, contract])
+    return () => clearInterval(interval);
+  }, [isConnected, contract]);
 
   return (
     <div className="App min-h-screen flex flex-col items-center justify-between">
@@ -191,16 +174,19 @@ export default function StudyGroup() {
                       key={index}
                       className={`p-3 rounded-lg ${
                         message.sender.toLowerCase() === account.toLowerCase()
-                          ? 'bg-teal-100 ml-auto'
-                          : 'bg-gray-100'
+                          ? "bg-teal-100 ml-auto"
+                          : "bg-gray-100"
                       } max-w-[80%] break-words`}
                     >
                       <p className="text-sm text-gray-500">
-                        {message.sender.slice(0, 6)}...{message.sender.slice(-4)}
+                        {message.sender.slice(0, 6)}...
+                        {message.sender.slice(-4)}
                       </p>
                       <p>{message.content}</p>
                       <p className="text-xs text-gray-500">
-                        {new Date(Number(message.timestamp) * 1000).toLocaleString()}
+                        {new Date(
+                          Number(message.timestamp) * 1000
+                        ).toLocaleString()}
                       </p>
                     </div>
                   ))}
@@ -212,7 +198,7 @@ export default function StudyGroup() {
                     placeholder="Type your message..."
                     value={newMessage}
                     onChange={(e) => setNewMessage(e.target.value)}
-                    onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
+                    onKeyPress={(e) => e.key === "Enter" && sendMessage()}
                     className="flex-grow"
                   />
                   <Button
@@ -229,5 +215,5 @@ export default function StudyGroup() {
       </div>
       <Footer />
     </div>
-  )
+  );
 }

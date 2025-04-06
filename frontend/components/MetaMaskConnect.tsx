@@ -106,22 +106,14 @@ export const MetaMaskConnect: React.FC<MetaMaskConnectProps> = ({
             });
           } catch (addError) {
             console.error("Failed to add Open Campus Codex network:", addError);
-            toast({
-              variant: "destructive",
-              title: "Network Error",
-              description: "Failed to add Open Campus Codex network",
-            });
+            toast.error("Failed to add Open Campus Codex network");
           }
         } else {
           console.error(
             "Failed to switch to Open Campus Codex network:",
             switchError
           );
-          toast({
-            variant: "destructive",
-            title: "Network Error",
-            description: "Failed to switch to Open Campus Codex network",
-          });
+          toast.error("Failed to switch to Open Campus Codex network");
         }
       }
     }
@@ -135,23 +127,15 @@ export const MetaMaskConnect: React.FC<MetaMaskConnectProps> = ({
       setIsConnected(true);
       localStorage.setItem("walletAddress", accounts[0]);
       onConnect?.(accounts[0]);
-      toast({
-        title: "Account Changed",
-        description: `Connected to ${accounts[0].slice(
-          0,
-          6
-        )}...${accounts[0].slice(-4)}`,
-      });
+      toast.success(
+        `Connected to ${accounts[0].slice(0, 6)}...${accounts[0].slice(-4)}`
+      );
     }
   };
 
   const handleChainChanged = async (chainId: string) => {
     if (chainId !== OPEN_CAMPUS_CHAIN_ID) {
-      toast({
-        variant: "destructive",
-        title: "Network Error",
-        description: "Please connect to Open Campus Codex network",
-      });
+      toast.error("Please connect to Open Campus Codex network");
       await switchToOpenCampusNetwork();
     }
   };
@@ -165,11 +149,7 @@ export const MetaMaskConnect: React.FC<MetaMaskConnectProps> = ({
 
   const connectWallet = async () => {
     if (typeof window.ethereum === "undefined") {
-      toast({
-        variant: "destructive",
-        title: "MetaMask Required",
-        description: "Please install MetaMask to use this application",
-      });
+      toast.error("MetaMask Required");
       return;
     }
 
@@ -178,11 +158,7 @@ export const MetaMaskConnect: React.FC<MetaMaskConnectProps> = ({
       const chainId = await window.ethereum.request({ method: "eth_chainId" });
 
       if (chainId !== OPEN_CAMPUS_CHAIN_ID) {
-        toast({
-          variant: "destructive",
-          title: "Network Error",
-          description: "Please connect to Open Campus Codex network",
-        });
+        toast.error("Please connect to Open Campus Codex network");
         return;
       }
 
@@ -194,20 +170,12 @@ export const MetaMaskConnect: React.FC<MetaMaskConnectProps> = ({
       localStorage.setItem("walletAddress", accounts[0]);
       onConnect?.(accounts[0]);
 
-      toast({
-        title: "Wallet Connected",
-        description: `Connected to ${accounts[0].slice(
-          0,
-          6
-        )}...${accounts[0].slice(-4)}`,
-      });
+      toast.success(
+        `Connected to ${accounts[0].slice(0, 6)}...${accounts[0].slice(-4)}`
+      );
     } catch (error: any) {
       console.error("Failed to connect wallet:", error);
-      toast({
-        variant: "destructive",
-        title: "Connection Error",
-        description: error.message || "Failed to connect wallet",
-      });
+      toast.error(error.message || "Failed to connect wallet");
     }
   };
 
