@@ -12,11 +12,14 @@ import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
-import { Bounce } from "react-toastify";
 import MintButton from "@/components/MintButton";
 import { ethers } from "ethers";
 import { useWallet } from "@/hooks/useWallet";
 import SongNFTAbi from "@/contracts/SongNFT.sol/SongNFT.json";
+import { useRouter } from "next/navigation";
+
+const TOKEN_ID = 0;
+const PROGRESS = 1;
 
 export default function ClientPage({
   courseId,
@@ -25,6 +28,7 @@ export default function ClientPage({
   courseId: string;
   initialData: any;
 }) {
+  const router = useRouter();
   const [activeChapter, setActiveChapter] = useState(0);
   const [completedChapters, setCompletedChapters] = useState<number[]>([]);
   const [showQuiz, setShowQuiz] = useState(false);
@@ -44,7 +48,11 @@ export default function ClientPage({
       signer
     );
 
-    const tx = await contract.updateCourseProgress(courseId, 0, signature);
+    const tx = await contract.updateCourseProgress(
+      TOKEN_ID,
+      PROGRESS,
+      signature
+    );
     const receipt = await tx.wait();
 
     toast.success(
@@ -52,31 +60,50 @@ export default function ClientPage({
     );
   };
 
+  const generateSignature = async () => {
+    try {
+      const response = await fetch("/api/generateSignature", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userAddress: account,
+          tokenId: TOKEN_ID,
+          progress: PROGRESS,
+        }),
+      });
+
+      const { signature } = await response.json();
+      return signature;
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
   const handleSign = async () => {
     const messageHash = ethers.solidityPackedKeccak256(
       ["address", "uint256", "uint8"],
-      [account, 0, courseId]
+      [account, TOKEN_ID, PROGRESS]
     );
 
-    const msgEthHash = ethers.getBytes(
-      ethers.solidityPackedKeccak256(
-        ["string", "bytes32"],
-        ["\x19Ethereum Signed Message:\n32", messageHash]
-      )
-    );
-
+    const msgEthHash = ethers.getBytes(messageHash);
+    const signature1 = await generateSignature();
+    console.log("signature1", signature1);
     if (!window.ethereum) return;
     // Request signature from MetaMask
-    const signature = await window.ethereum.request({
-      method: "personal_sign",
-      params: [
-        ethers.hexlify(msgEthHash),
-        account, // Use the connected wallet address directly
-      ],
-    });
+    const signature =
+      "0xf43c7ef0da73abe0227eb4e67f811de14847da90d6e6e5d653c8457ec20ecea011e8098d8859885cdcdc404741560978e91465fb23ea673149e17ee0f3de06b51c";
+    // await window.ethereum.request({
+    //   method: "personal_sign",
+    //   params: [
+    //     ethers.hexlify(msgEthHash),
+    //     account, // Use the connected wallet address directly
+    //   ],
+    // });
 
     console.log("Signature:", signature);
-    updateCourseProgress(signature);
+    updateCourseProgress(signature1);
   };
 
   useEffect(() => {
@@ -93,6 +120,7 @@ export default function ClientPage({
           <MintButton
             onMintSuccess={() => {
               toast.dismiss(toastId);
+              router.push("/learn/2");
             }}
           />
         </div>,

@@ -6,6 +6,7 @@ import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
+import "hardhat/console.sol";
 
 contract SongNFT is ERC721, ERC721URIStorage, Ownable {
     using ECDSA for bytes32;
@@ -34,11 +35,14 @@ contract SongNFT is ERC721, ERC721URIStorage, Ownable {
     mapping(uint256 => CourseProgress) public _courseProgress;
 
     constructor(address signer) ERC721("SongNFT", "Song") Ownable(msg.sender) {
+        console.log("signer", signer);
+        console.log("msg.sender", msg.sender);
         _signer = signer;
     }
 
     function safeMint() public {
         uint256 tokenId = _nextTokenId++;
+        console.log("tokenId safeMint-->", tokenId);
         _safeMint(msg.sender, tokenId);
         _setTokenURI(tokenId, ipfsUris[0]);
         _courseProgress[tokenId] = CourseProgress.INIT;
@@ -49,11 +53,13 @@ contract SongNFT is ERC721, ERC721URIStorage, Ownable {
         require(!_signatures[signature], "Signature Already Used");
         bytes32 _msgHash = getMessageHash(msg.sender, tokenId, progress);
         bytes32 _ethSignedMessageHash = toEthSignedMessageHash(_msgHash);
+
         require(verify(_ethSignedMessageHash, signature), "Invalid Signature");
         _signatures[signature] = true;
 
         // verify tokenId
         address from = _ownerOf(tokenId);
+        console.log("from", from);
         require(from == msg.sender, "Invalid TokenId");
 
         // verify course progress
@@ -72,17 +78,24 @@ contract SongNFT is ERC721, ERC721URIStorage, Ownable {
     }
 
     function getMessageHash(address _account, uint256 _tokenId, uint8 _progress) public pure returns (bytes32) {
+        console.log("account", _account);
+        console.log("tokenId", _tokenId);
+        console.log("progress", _progress);
         return keccak256(abi.encodePacked(_account, _tokenId, _progress));
     }
 
     function toEthSignedMessageHash(bytes32 hash) internal pure returns (bytes32) {
         // 32 is the length in bytes of hash,
         // enforced by the type signature above
-        return keccak256(abi.encodePacked("\x19Ethereum Signed Message:\n32", hash));
+        bytes32 _ethSignedMessageHash = keccak256(abi.encodePacked("\x19Ethereum Signed Message:\n32", hash));
+        console.logBytes32(_ethSignedMessageHash);
+        return _ethSignedMessageHash;
     }
 
     function verify(bytes32 _msgHash, bytes memory _signature) public view returns (bool) {
         (address recovered,,) = ECDSA.tryRecover(_msgHash, _signature);
+        console.log("recovered", recovered);
+        console.log("signer-verify", _signer);
         return recovered == _signer;
     }
 

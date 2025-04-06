@@ -220,6 +220,7 @@
           const msgEthHash = ethers.getBytes(messageHash);
 
           // Request signature from MetaMask
+          console.log("walletAddress.value", walletAddress.value);
           const signature = await window.ethereum.request({
             method: "personal_sign",
             params: [
@@ -238,3 +239,5 @@
     </script>
   </body>
 </html>
+
+<!-- 0x3f3d00f83d9dbe85e8b24ddb33d0cdcd88283e03090c349a91c1b3eebed09da7 -->
