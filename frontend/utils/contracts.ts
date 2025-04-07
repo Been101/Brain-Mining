@@ -2,7 +2,7 @@ import { ethers } from "ethers";
 import SongNFTAbi from "@/contracts/SongNFT.sol/SongNFT.json";
 
 // 合约地址，需要替换为实际部署后的地址
-const CONTRACT_ADDRESS = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";
+const CONTRACT_ADDRESS = "0x86A2EE8FAf9A840F7a2c64CA3d51209F9A02081D";
 
 export const mintNFT = async () => {
   try {
@@ -19,7 +19,11 @@ export const mintNFT = async () => {
     const signer = await provider.getSigner();
 
     // 创建合约实例
-    const contract = new ethers.Contract(CONTRACT_ADDRESS, SongNFTAbi, signer);
+    const contract = new ethers.Contract(
+      CONTRACT_ADDRESS,
+      SongNFTAbi as any,
+      signer
+    );
 
     // 调用合约的 safeMint 方法
     const tx = await contract.safeMint();

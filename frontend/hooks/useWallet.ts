@@ -38,11 +38,7 @@ export const useWallet = () => {
   // 切换到 Hardhat 网络
   const switchToHardhatNetwork = async () => {
     if (!window.ethereum) {
-      toast({
-        title: "Error",
-        description: "Please install MetaMask!",
-        variant: "destructive",
-      });
+      toast.error("Please install MetaMask!");
       return false;
     }
 
@@ -63,19 +59,11 @@ export const useWallet = () => {
           });
           return true;
         } catch (addError: any) {
-          toast({
-            title: "Error",
-            description: "Failed to add Hardhat network",
-            variant: "destructive",
-          });
+          toast.error("Failed to add Hardhat network");
           return false;
         }
       }
-      toast({
-        title: "Error",
-        description: "Failed to switch network",
-        variant: "destructive",
-      });
+      toast.error("Failed to switch network");
       return false;
     }
   };

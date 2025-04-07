@@ -2,14 +2,7 @@
 import { useOCAuth } from "@opencampus/ocid-connect-js";
 import { jwtDecode } from "jwt-decode";
 import { useRouter } from "next/navigation";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import LoginButton from "../../components/LoginButton";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -30,7 +23,7 @@ const UserPage = () => {
   const { authState, ocAuth } = useOCAuth();
   const router = useRouter();
 
-  if (authState.error) {
+  if (authState?.error) {
     return (
       <div className="flex justify-center items-center h-screen">
         <div className="bg-red-100 p-4 rounded-md shadow-md">
@@ -41,7 +34,7 @@ const UserPage = () => {
   } else {
     let userInfo: DecodedToken | null = null;
 
-    if (authState.idToken) {
+    if (authState?.idToken) {
       userInfo = jwtDecode<DecodedToken>(authState.idToken);
       console.log("userInfo", userInfo);
 
