@@ -180,38 +180,3 @@ cd frontend
 # Start the development server
 npm run dev
 ```
-
-<table align="center">
-  <tr>
-    <td align="center">
-      <img src="https://i.ibb.co/Zdb4RKD/create-edu-dapp-before.png" alt="create-edu-dapp-before" width="500"/>
-      <b>(/) create-edu-dapp Before Auth</b>
-    </td>
-    <td align="center">
-      <img src="https://i.ibb.co/Xzd8bqS/create-edu-dapp-after.png" alt="create-edu-dapp-after" width="500"/>
-      <b>(state update) create-edu-dapp After Auth</b>
-    </td>
-  </tr>
-  <tr>
-    <td align="center">
-      <img src="https://i.ibb.co/dc5JVgF/connect-with-ocid-before.png" alt="connect-with-ocid-before" width="500"/>
-      <b>(/user) connect-with-ocid Before Auth</b>
-    </td>
-    <td align="center">
-      <img src="https://i.ibb.co/QbK9MNm/connect-with-ocid-after.png" alt="connect-with-ocid-after" width="500"/>
-      <b>(state update) connect-with-ocid After Auth</b>
-    </td>
-  </tr>
-</table>
-
-## ➡️ Contributing
-
-We welcome contributions from the community! If you'd like to contribute, please follow the guidelines in our [CONTRIBUTING.md](https://github.com/AsharibAli/create-edu-dapp/blob/main/CONTRIBUTING.md) file.
-
-## ⚖️ License
-
-create-edu-dapp is licensed under the [MIT License](https://github.com/AsharibAli/create-edu-dapp/blob/main/LICENSE.md).
-
-### ⭐️ Support the Project
-
-If you enjoy using EduKit, please show your support by starring the repository and follow EduHub on [X](https://x.com/eduhub__) for the latest updates and insights.
