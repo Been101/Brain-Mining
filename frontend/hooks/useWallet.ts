@@ -2,17 +2,17 @@ import { useState, useEffect } from "react";
 import { ethers } from "ethers";
 import { useToast } from "@/components/ui/use-toast";
 
-// Hardhat 网络配置
-const HARDHAT_CONFIG = {
-  chainId: "0x7A69", // 31337 的十六进制
-  chainIdNumber: 31337, // 添加数字形式的 chainId
-  chainName: "Hardhat Local",
+// EDU Test Chain 网络配置
+const EDU_TEST_CHAIN_CONFIG = {
+  chainId: "0xA051C", // 656476 的十六进制
+  chainIdNumber: 656476,
+  chainName: "EDU Test Chain",
   nativeCurrency: {
     name: "Ethereum",
-    symbol: "ETH",
+    symbol: "EDU",
     decimals: 18,
   },
-  rpcUrls: ["http://127.0.0.1:8545"],
+  rpcUrls: ["https://edu-chain-testnet.blockscout.com/api/"],
 };
 
 export const useWallet = () => {
@@ -28,7 +28,7 @@ export const useWallet = () => {
     try {
       const chainId = await window.ethereum.request({ method: "eth_chainId" });
       const chainIdNumber = parseInt(chainId, 16);
-      return chainIdNumber === HARDHAT_CONFIG.chainIdNumber;
+      return chainIdNumber === EDU_TEST_CHAIN_CONFIG.chainIdNumber;
     } catch (error) {
       console.error("Error checking network:", error);
       return false;
@@ -46,7 +46,7 @@ export const useWallet = () => {
       // 尝试切换到 Hardhat 网络
       await window.ethereum.request({
         method: "wallet_switchEthereumChain",
-        params: [{ chainId: HARDHAT_CONFIG.chainId }],
+        params: [{ chainId: EDU_TEST_CHAIN_CONFIG.chainId }],
       });
       return true;
     } catch (switchError: any) {
@@ -55,7 +55,7 @@ export const useWallet = () => {
         try {
           await window.ethereum.request({
             method: "wallet_addEthereumChain",
-            params: [HARDHAT_CONFIG],
+            params: [EDU_TEST_CHAIN_CONFIG],
           });
           return true;
         } catch (addError: any) {
