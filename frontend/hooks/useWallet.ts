@@ -4,7 +4,7 @@ import { useToast } from "@/components/ui/use-toast";
 
 // EDU Test Chain 网络配置
 const EDU_TEST_CHAIN_CONFIG = {
-  chainId: "0xA051C", // 656476 的十六进制
+  chainId: "0xa045c", // 656476 的十六进制
   chainIdNumber: 656476,
   chainName: "EDU Test Chain",
   nativeCurrency: {
