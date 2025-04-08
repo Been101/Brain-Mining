@@ -24,7 +24,7 @@ const config: HardhatUserConfig = {
       chainId: 31337,
     },
     "educhain-testnet": {
-      url: `https://rpc.open-campus-codex.gelato.digital`,
+      url: `https://open-campus-codex-sepolia.drpc.org`,
       accounts: [ACCOUNT_PRIVATE_KEY],
     },
     "educhain-mainnet": {
