@@ -45,8 +45,8 @@ const config: HardhatUserConfig = {
         network: "educhain-testnet",
         chainId: 656476,
         urls: {
-          apiURL: "https://edu-chain-testnet.blockscout.com/api/",
-          browserURL: "https://edu-chain-testnet.blockscout.com",
+          apiURL: "https://open-campus-codex-sepolia.drpc.org",
+          browserURL: "https://opencampus-codex.blockscout.com",
         },
       },
       {
