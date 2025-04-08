@@ -12,7 +12,7 @@ const EDU_TEST_CHAIN_CONFIG = {
     symbol: "EDU",
     decimals: 18,
   },
-  rpcUrls: ["https://edu-chain-testnet.blockscout.com/api/"],
+  rpcUrls: ["https://open-campus-codex-sepolia.drpc.org"],
 };
 
 export const useWallet = () => {
